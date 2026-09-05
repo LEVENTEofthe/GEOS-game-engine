@@ -1,8 +1,18 @@
 # GEOS System - játékfejlesztő motor piaci és otthoni használatra
 
-## C#/.NET alapú játékmotor és grafikus szerkesztő, körökre osztott stratégiai és RPG játékok készítéséhez.
+## C#/.NET alapú játékmotor és grafikus szerkesztő körökre osztott stratégiai és RPG játékok készítéséhez.
 
-[ Screenshots ]
+<table>
+  <tr>
+    <td><img src="Képek/Képernyőképek/screenshot1.png" width="500" /></td>
+    <td><img src="Képek/Képernyőképek/screenshot2.png" width="500" /></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <img src="Képek/Képernyőképek/screenshot3.png" width="500" />
+    </td>
+  </tr>
+</table>
 
 Egy solo-development projekt, amely a saját kedvenc játékaim működési elveinek megértésének vágyából indult, de egy ambiciózusabb céllá kerekedett ki. Az elsődleges célja egy olyan szoftver megalkotása, amely segítségével akár programozásban tapasztalatlan felhasználók is képesek személyre szabott játéktermékeket gyártani a meghatározott műfajok keretein belül, a végső ambíció pedig egy beépített online áruház és közösségi felület létrehozása, amelybe gombnyomással oszthatjuk meg akár a fejlesztőben készített játékainkat, akár saját gyártású fejlesztési kellékeket és tartalomegységeket.
 A szoftver aktív fejlesztés alatt áll, az első publikus verzió tervezett megjelenése 2027 közepére várható. 
@@ -15,8 +25,8 @@ A projekt két különálló rendszer együttműködésével működik:
 A fejlesztőben készült kellékeket JSON formátumban tároljuk a fájlrendszerben, amelyek direkt módon felhasználhatók a motor rendszereiben. A különböző modulok a könnyű bővíthetőség jegyében épültek, támogatva a programozó felhasználók általi módosításokat.
 
 ## Kiemelt rendszerek:
- - Gráf alapú grafikus programozó felület interakciók készítésére | ✅Elkészült
- - Személyre szabható döntéshozatali rendszer NPC aktorok viselkedésformáinak meghatározására | ✅Elkészült
+ - [Gráf alapú grafikus programozó felület interakciók készítésére](Dokumentáció/Rendszer/Interakció-editor.md) | ✅Elkészült
+ - [Személyre szabható döntéshozatali rendszer NPC aktorok viselkedésformáinak meghatározására](Dokumentáció/Rendszer/NPC-döntéshozatal.md) | ✅Elkészült
  - Rajzolás alapú dinamikus játékmező készítés | ✅Elkészült
  - Létrehozott tartalmak futási szempontoktól független JSON fájlokban történő tárolása | ✅Elkészült
  - Gameplay-loop rendszer és interaktálható játékfelület amely élőben kombinálja a fent említett rendszereket | ✅Elkészült
