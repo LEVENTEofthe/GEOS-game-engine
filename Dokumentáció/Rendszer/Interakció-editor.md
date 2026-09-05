@@ -2,18 +2,18 @@
 
 ## Scratch-szerű gráfszerkesztő felület komplex játékmechanikai cselekmény formulák készítésére és szérializálására. 
 
-[ showcase video ]
+https://github.com/user-attachments/assets/0a4063d2-1aa0-44fd-8ced-2d32f770c371
 
 A stratégiai RPG játékok műfajában a játékosok leginkább az irányított karaktereik által birtokolt különböző interakciókon keresztül képesek kihatással lenni a játék világára és állapotára, mivel ezek határozzák meg, mire képes az adott aktor és mire képes rajtuk keresztül a játékos a játékon belül. Ennek a szerkesztő rendszernek a lényege, hogy az említett interakció objektumok létrehozását támogassa, minél nagyobb szabadságot adva kreatív megoldásoknak. Ez egy Scratch-hez hasonló, gráfépítő rendszeren keresztül történik, ahol különböző parancsokat és kellékeiket összekapcsolható építőkockákként alkalmazhatunk.
 
 ## Rendszer felépítése
 A szerkesztőben létrehozott blokkgráf validálás után Data Transfer Object formában kerül szerializálásra egy JSON fájlba. A JSON kizárólag az interakció leírását tartalmazza, a runtime objektumok belső állapotát nem. Betöltéskor egy Factory a DTO alapján hozza létre a játék keretrendszerben alkalmazható interakció objektumokat.
 
-[ Mermaid graph on system pipeline ]
+<img width="234" height="721" alt="GameAction_datapipeline" src="https://github.com/user-attachments/assets/bbf48833-1ba3-411a-aef8-141e0b236852" />
 
 Maguk az interakció objektumok futtatható parancsok láncát tartalmazzák a játékmenet rendszer számára, minden részelem a hozzá képest előző elem futtatásából elérhető.
 
-[ Mermaid graph on game action execution pipeline ]
+<img width="388" height="586" alt="GameAction_executionpipeline" src="https://github.com/user-attachments/assets/b8b4c60e-32f7-45a8-adab-591ba6a5edec" />
 
 ## Blokkok
 Az oldalon egy eszköztár áll rendelkezésünkre, amelyen keresztül az alábbi fajtájú építőkockákból érhetünk el számos előre deklarált funkcionalitású darabokat:
