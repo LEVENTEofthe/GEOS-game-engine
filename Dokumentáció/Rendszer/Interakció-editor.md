@@ -32,4 +32,4 @@ Az elkészült interakciókat Data Transfer Object módján szérializáljuk: eg
 Szérializálás előtt a szerkesztő ellenőrzi, hogy a létrehozott blokk láncban szerepel-e hiányos adat.
 
 ## Bővíthetőség
-A Blokk építő rendszer a felhasználók általi bővíthetőség szemléletében épült, támogatja a felhasználók által készített, külső forrásokból importált típusok alkalmazását. A bővítési útmutatóért és egy teljes példán keresztüli utmutatásért lásd: [ link to Blokk létrehozás.md ]
+A Blokk építő rendszer a felhasználók általi bővíthetőség szemléletében épült, támogatja a felhasználók által készített, külső forrásokból importált típusok alkalmazását. A bővítési útmutatóért és egy teljes példán keresztüli utmutatásért látogast meg a [blokk létrehozásról készült dokumentációt](../Felhasználói/Blokk-létrehozás.md).
