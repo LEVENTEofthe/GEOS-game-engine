@@ -2,7 +2,7 @@
 
 ## A nem játékos által irányított karakterek intelligens viselkedésformáit és interakció végzését megvalósító rendszer.
 
-[ showcase video ]
+https://github.com/user-attachments/assets/f4d0dcf6-4926-469c-a4f4-307cb53d96d8
 
 A stratégiai játékok célja, hogy két szemben álló fél által irányított játékbábuk csoportjából a miénk kerüljön ki győztesen a döntéshozatali és előrelátási képességeink megtornáztatásával. Ehhez elengedhetetlen egy olyan ellenfél, aki kihívást tud nyújtani a játékos számára ezeken a területeken. Egyjátékos játékok esetén ez a feladat a játékon belül futó algoritmusokra hárul. Egy erre szakosodott játék-keretrendszer alkotójaként meg kellett valósítanom az ilyen algoritmusok létrehozását olyan formázható módon, hogy az ne csak egy elképzelt játékmeneti stílust legyen képes kiszolgálni, hanem a műfaj bő keretein belül a lehető legsokoldalúbban felhasználható legyen.
 
@@ -11,7 +11,7 @@ Az erre készített rendszerem dizájnja az alábbi szegmensekből épül össze
  - Aktor személyiségjegyek: Minden karakter, amelyet nem a játékos irányít, implementál egy objektumot, amely tartalmazza a saját céljainak meghatározását annak formájában, hogy milyen történéseket hogyan értékel.
  - Döntéshozatali rendszer: A személyiségjegyek és a rendelkezésre álló interakciók összehasonlítása és kiértékelése a célnak legjobban eleget tevő lépéssorozat megtalálására.
 
-[ system flow diagram ]
+![Döntéshozatal folyamata](../../Képek/Pipeline-gráfok/Decisionmaking_pipeline.png)
 
 ## Interakció szemantikák
 Egy játék menetének legnagyobb része akörül forog, hogy az irányított aktoraink által birtokolt interakció objektumokat céltudatosan alkalmazzunk. Amennyiben képesek vagyunk elérni, hogy az aktorokat irányító algoritmus el tudja dönteni, hogy melyik interakcióval mit lehet elérni, azzal elő tudjuk készíteni számára ugyanezt a céltudatosságot. 
@@ -46,8 +46,6 @@ Az adatmezők csoportosításával a célokat tovább tudjuk generalizálni, pé
 
 A kontextus-elemek alá tartoznak a további olyan célkitűzések, amiket az interakciók kizárólag közvetetten, mellékhatásként képesek elérni. Az elsődleges céljuk az adatmező-csoportok szabályozása olyan helyzetekkel szemben, ahol a célkitűzések saját maguk ellen dolgoznának. Például egy olyan aktornak, amelynek a célja, hogy gyógyító effektekkel lássa el a játékossal szemben álló karaktereket, pusztán adatmező-csoportokkal lehetetlen megtanítani, hogy csakis a saját csapattársait gyógyítsa és a játékos oldalát egyáltalán ne. Itt jönnek képbe a kontextus-elemek, amelyeknek a célja olyan adatok absztraktizálása, amelyek csak a játékvilág szemszögéből léteznek, de konkrét benne szereplő objektumok adatmezőiben nem. Ilyenek a különböző aktor frakciók megkülönböztetése vagy a célpontoktól való relatív távolság. Tehát létrehozhatunk PersonalityTrait objektumokat, amelyek negatívan értékelik a csapattársaink szabotálását és az ellenfeleink támogatását.
 
-[ Működési példa ]
-
 ## Döntéshozatali rendszer
 A rendelkezésre álló interakciók megértése és a célok deklarálása után az utolsó lépés megtalálni majd elvégezni a szituációhoz legjobban illő lépést. A rendszer ezen szegmense a játékmeneti ciklus részét képviseli, amikor egy nem játékos által irányított aktorra kerül a lépés, automatikusan meghívásra kerül.
 
@@ -57,7 +55,43 @@ A működése az alábbi lépésekben történik:
 2. A listában szereplő lehetőségek az őket birtokló aktor PersonalityTrait objektumaival való megmérése. Ha egy ActionExecutionOption objektum tartalmaz delta értékeket olyan adatmezőhöz, amelyeket figyelnek a birtokolt PersonalityTrait objektumok valamelyike, azok meg lesz mérve a releváns értékelő görbével. Az erekből kapott eredmények összeadásra kerülnek egy "maxScore" változóba. Ha az aktuális ActionExecutionObjektum nagyobb maxScore pontot ért el mint az eddig legnagyobbnak mért, úgy azt bemásoljuk egy bestOption változóba. 
 3. Az összes lehetőség kiértékelése után a bestOption változó tartalmát lefuttatjuk. A játékos általi interakció lefuttatás esetén olykor élőben kell kiválasztani célpontokat egyes blokkok effektjeihez, de a nem játékos által irányítottak esetén a célpontok automatikusan kiválasztásra kerülnek az BlockExecutionOption objektumok létrehozásakor, ezek aztán átkerülnek a felhasználásra alkalmas ActionExecutionOption objektumokba.
 
-[ pseudo-kód ]
+### Pseudokód
+```
+FUNCTION ChooseAndExecuteAction(actor, context):
+    executionOptions ← ∅
+    FOR EACH action IN actor.ActionSet:
+        options ← action.GenerateActionChoiceOptions(context)
+        executionOptions ← executionOptions ∪ options
+
+    bestOption ← null
+    highestScore ← −∞
+    FOR EACH option IN executionOptions:
+        score ← 0
+
+        FOR EACH delta IN option.Deltas:
+            traits ← actor.GetTraitsForProperty(delta.PropertyDescriptor)
+            FOR EACH trait IN traits:
+                score ← score + trait.Curve.Evaluate(delta.Value) × trait.Weight
+
+        FOR EACH trait IN actor.ContextTraits:
+            featureValue ← trait.ContextFeature.Calculate(context, option)
+            score ← score + trait.Curve.Evaluate(featureValue) × trait.Weight
+
+        IF score ≥ highestScore:
+            highestScore ← score
+            bestOption ← option
+
+    action ← bestOption.SourceGameAction
+    context.ExecutingAction ← action
+    currentBlock ← action.EntryBlock
+
+    WHILE currentBlock ≠ null:
+        FOR EACH input IN currentBlock.PreExecutionInputs:
+            IF NOT context.Has(input):
+                ResolveInput(bestOption, context)
+
+        currentBlock ← Execute(context)
+```
 
 Ezzel az algoritmussal a nem játékos által irányított aktorok minden esetben a birtokolt PersonalityTrait objektumaiknak legjobban eleget tevő interakciókat és célpontokat fogják választani, de esetenként célszerűbb valamilyen szintű véletlenszerűséget helyezni a rendszerbe (például a második-harmadik legjobbra kiértékelt interakció vagy célpontcsoport választása az elsővel szemben) hogy színesebbé, kevésbé gépiessé tegyük az élményt.
 
